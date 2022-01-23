@@ -1,20 +1,24 @@
-public class App {
-    public static void main(String[] args) throws Exception {
-        // Get inputs
-        int gridMaxX = 5;
-        int gridMaxY = 5;
-        int inputX = 1;
-        int inputY = 2;
-        char direction = 'N';
+import java.io.File;
+import java.util.Scanner;
 
-        // Create rover object
-        Rover rover1 = new Rover(inputX, inputY, direction);
-        for (int count = 0; count < 4; count++) {
-            rover1.changeDirection('L');
-            rover1.move();
+public class App {
+    public static void main(String[] args) {
+        try {
+            Scanner fileScanner = new Scanner(new File("data/testFile.txt"));
+
+            fileScanner.nextLine();
+            while (fileScanner.hasNextLine()) {
+                String roverLine1 = fileScanner.nextLine();
+                String roverLine2 = fileScanner.nextLine();
+
+                Rover rover = new Rover(roverLine1);
+                rover.parseInstructions(roverLine2);
+                System.out.println(rover.getCurrentPosition());
+            }
+
+            fileScanner.close();
+        } catch (Exception e) {
+            System.out.println("Error processing input: " + e.getMessage());
         }
-        rover1.move();
-        
-        System.out.println(rover1.getCurrentPostion());
     }
 }
