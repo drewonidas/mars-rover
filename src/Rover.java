@@ -2,52 +2,65 @@ public class Rover {
     private int x;
     private int y;
     private int direction;
+    private int plateauMaxX;
+    private int plateauMaxY;
     private final String directionCharacters = "NESW";
 
-    Rover(String roverParams) {
+    Rover(String roverParams, String plateauCoordinates) {
         String[] params = roverParams.split("\\s+", 3);
         this.x = Integer.parseInt(params[0]);
         this.y = Integer.parseInt(params[1]);
+
+        String[] coordinates = plateauCoordinates.split("\\s+", 2);
+        this.plateauMaxX = Integer.parseInt(coordinates[0]);
+        this.plateauMaxY = Integer.parseInt(coordinates[1]);
         this.direction = directionCharacters.indexOf(params[2]);
+
+        checkBounds();
     }
 
     void parseInstructions(String instructions) {
         for (int c = 0; c < instructions.length(); c++) {
             if (instructions.charAt(c) == 'M') {
                 move();
+                checkBounds();
             } else if (instructions.charAt(c) == 'L' || instructions.charAt(c) == 'R') {
                 changeDirection(instructions.charAt(c));
             }
         }
     }
 
-    boolean move() {
+    void move() {
         switch (directionCharacters.charAt(direction)) {
             case 'N':
                 y = y + 1;
-                return true;
+                break;
             case 'E':
                 x = x + 1;
-                return true;
+                break;
             case 'S':
                 y = y - 1;
-                return true;
+                break;
             case 'W':
                 x = x - 1;
-                return true;    
+                break;
             default:
-                return false;
+                break;
         }
     }
 
-    boolean changeDirection(char rotationDirection) {
+    void checkBounds() {
+        if ((this.x < 0 || this.x > plateauMaxX) || (this.y < 0 || this.y > plateauMaxY)) {
+            throw new RuntimeException("Rover out of bounds");
+        }
+    }
+
+    void changeDirection(char rotationDirection) {
         int rotationValue;
         if (rotationDirection == 'L') {
             rotationValue = -1;
-        } else if (rotationDirection == 'R') {
-            rotationValue = 1;
         } else {
-            return false;
+            rotationValue = 1;
         }
 
         direction = direction + rotationValue; 
@@ -56,8 +69,6 @@ public class Rover {
         } else if (direction > 3) {
             direction = 0;
         }
-
-        return true;
     }
 
     String getCurrentPosition() {

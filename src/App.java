@@ -6,19 +6,22 @@ public class App {
         try {
             Scanner fileScanner = new Scanner(new File("data/testFile.txt"));
 
-            fileScanner.nextLine();
-            while (fileScanner.hasNextLine()) {
-                String roverLine1 = fileScanner.nextLine();
-                String roverLine2 = fileScanner.nextLine();
+            String plateauCoordinates = fileScanner.nextLine();
 
-                Rover rover = new Rover(roverLine1);
-                rover.parseInstructions(roverLine2);
+            while (fileScanner.hasNextLine()) {
+                String roverCoordinates = fileScanner.nextLine();
+                String roverInstructions = fileScanner.nextLine();
+
+                Rover rover = new Rover(roverCoordinates, plateauCoordinates);
+                rover.parseInstructions(roverInstructions);
+
                 System.out.println(rover.getCurrentPosition());
             }
 
             fileScanner.close();
         } catch (Exception e) {
             System.out.println("Error processing input: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
