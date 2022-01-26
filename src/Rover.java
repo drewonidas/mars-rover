@@ -16,6 +16,11 @@ public class Rover {
         this.plateauMaxY = Integer.parseInt(coordinates[1]);
         this.direction = directionCharacters.indexOf(params[2]);
 
+        if (this.direction == -1) {
+            throw new RuntimeException(
+                    String.format("Invalid instructions: Unrecognized direction '%s'",
+                            params[2]));
+        }
         checkBounds();
     }
 
@@ -26,6 +31,10 @@ public class Rover {
                 checkBounds();
             } else if (instructions.charAt(c) == 'L' || instructions.charAt(c) == 'R') {
                 changeDirection(instructions.charAt(c));
+            } else {
+                throw new RuntimeException(
+                        String.format("Invalid movement instructions: unrecognized character at index %d: '%c'",
+                                c, instructions.charAt(c)));
             }
         }
     }
@@ -51,7 +60,7 @@ public class Rover {
 
     void checkBounds() {
         if ((this.x < 0 || this.x > plateauMaxX) || (this.y < 0 || this.y > plateauMaxY)) {
-            throw new RuntimeException("Rover out of bounds");
+            throw new RuntimeException("Rover position out of bounds");
         }
     }
 
